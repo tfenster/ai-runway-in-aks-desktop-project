@@ -14,14 +14,14 @@ az aks get-credentials -g rg-airunway-aksd -n aks-airunway-aksd --overwrite-exis
 kubelogin convert-kubeconfig -l azurecli
 
 helm repo add kaito https://kaito-project.github.io/kaito/charts/kaito
-helm install kaito-workspace kaito/workspace --version 0.10.0 --namespace kaito-workspace --create-namespace --set featureGates.disableNodeAutoProvisioning=true
+helm install kaito-workspace kaito/workspace --version 0.10.0 --namespace kaito-workspace --create-namespace --set featureGates.disableNodeAutoProvisioning=true --wait --timeout 5m
 
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.7.0/standard-install.yaml
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/releases/download/v1.6.2/manifests.yaml
 istioctl install --set profile=minimal --set values.pilot.env.ENABLE_GATEWAY_API_INFERENCE_EXTENSION=true -y
 kubectl create namespace gateway
 kubectl apply -f inference-gateway.yaml
-helm install body-based-router -n gateway --set provider.name=istio --version v1.5.0 oci://registry.k8s.io/gateway-api-inference-extension/charts/body-based-routing
+helm install body-based-router -n gateway --set provider.name=istio --version v1.5.0 oci://registry.k8s.io/gateway-api-inference-extension/charts/body-based-routing --wait --timeout 5m
 
 kubectl apply -f https://raw.githubusercontent.com/ai-runway/airunway/refs/tags/v0.8.0/deploy/controller.yaml
 kubectl apply -f https://raw.githubusercontent.com/ai-runway/airunway/refs/tags/v0.8.0/deploy/dashboard.yaml
