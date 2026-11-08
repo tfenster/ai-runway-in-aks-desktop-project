@@ -1,3 +1,4 @@
+$ME = az ad signed-in-user show --query id -o tsv
 $NS = "llm-demo"
 $AKS_ID = az aks show -g "rg-airunway-aksd" -n "aks-airunway-aksd" --query id -o tsv
 
